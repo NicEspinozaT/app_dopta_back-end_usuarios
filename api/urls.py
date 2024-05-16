@@ -5,6 +5,8 @@ from .views import (
     ActivateAccount,
     LoginView,
     RegistroOrganizaicion,
+    RecuPasswordRequest,
+    RecuPasswordConfirm,
 )
 
 urlpatterns = [
@@ -17,4 +19,10 @@ urlpatterns = [
     path("activate-account/", ActivateAccount.as_view(), name="activate-account"),
     path("login/", LoginView.as_view(), name="login"),
     path("perfil/", PerfilUsuario.as_view(), name="perfil"),
+    path("recuperar/", RecuPasswordRequest.as_view(), name="recuperar-contraseña"),
+    path(
+        "recuperar-confirmacion",
+        RecuPasswordConfirm.as_view(),
+        name="recuperar-confirmacion",
+    ),
 ]

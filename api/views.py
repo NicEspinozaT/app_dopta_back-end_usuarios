@@ -234,7 +234,7 @@ class RecuPasswordRequest(APIView):
             user = User.objects.get(email=email)
             if user:
                 token = default_token_generator.make_token(user)
-                reset_url = reverse("password_reset_confirm")
+                reset_url = reverse("recuperar-confirmacion")
                 reset_url += f"?email={email}&token={token}"
                 reset_link = settings.BASE_URL + reset_url
                 subject = "Recuperación de Contraseña"

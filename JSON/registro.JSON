@@ -1,0 +1,24 @@
+[
+    {
+        "user": {
+            "username": "Nicolongo",
+            "email": "nicolasespinoza1985@gmail.com",
+            "password": "clavenico123"
+        },
+        "telefono": 86542808,
+        "direccion": "Los maquis 368",
+        "nombre": "Nicolas",
+        "apellido": "Espinoza"
+    },
+    {
+        "user": {
+            "username": "Pipedsl",
+            "email": "h.navarrete@duocuc.cl",
+            "password": "clavehugo123"
+        },
+        "telefono": 123456789,
+        "direccion": "Los Olivos 10958",
+        "nombre": "Hugo",
+        "apellido": "Navarrete"
+    }
+]
