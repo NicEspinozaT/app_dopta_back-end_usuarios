@@ -41,16 +41,18 @@ class PersonaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Persona
-        fields = ["user", "telefono", "direccion", "nombre", "apellido"]
+        fields = [
+            "user",
+            "telefono",
+            "direccion",
+            "nombre",
+            "apellido",
+        ]
 
     def create(self, validated_data):
-
         user_data = validated_data.pop("user")
-
         user = User.objects.create_user(**user_data)
-
         persona = Persona.objects.create(user=user, **validated_data)
-
         return persona
 
     def update(self, instance, validated_data):

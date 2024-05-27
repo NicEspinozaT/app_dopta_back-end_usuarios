@@ -112,7 +112,7 @@ class RegistroOrganizaicion(APIView):
             activation_link = (
                 settings.BASE_URL
                 + reverse("activate-account")
-                + f"?email={organizacion.user.email}&token={token}&user_type=Persona"
+                + f"?email={organizacion.user.email}&token={token}&user_type=Organizacion"
             )
             subject = "Activación de cuenta"
             message = f"Por favor, haz clic en el siguiente enlace para activar tu cuenta: {activation_link}"

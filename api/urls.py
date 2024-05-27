@@ -12,7 +12,7 @@ from .views import (
 urlpatterns = [
     path("persona/registro/", RegistroPersona.as_view(), name="persona-registro"),
     path(
-        "Organizacion/registro/",
+        "organizacion/registro/",
         RegistroOrganizaicion.as_view(),
         name="organizacion-registro",
     ),
