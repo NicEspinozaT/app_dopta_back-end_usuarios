@@ -16,7 +16,7 @@ from .serializers import (
     RecuPassConfirmserializer,
 )
 from django.contrib.auth.tokens import default_token_generator
-from .models import User, Persona, Organizacion, Administrador
+from .models import Usuario, Persona, Organizacion, Administrador
 
 
 # login
@@ -30,7 +30,7 @@ class LoginView(APIView):
             password = serializer.validated_data.get("password")
 
             try:
-                user = User.objects.get(email=email)
+                user = Usuario.objects.get(email=email)
                 if user.check_password(password):
                     if user.is_active:
                         user.last_login = timezone.now()
@@ -64,7 +64,7 @@ class LoginView(APIView):
                         {"error": "Credenciales Invalidas"},
                         status=status.HTTP_400_BAD_REQUEST,
                     )
-            except User.DoesNotExist:
+            except Usuario.DoesNotExist:
                 return Response(
                     {"error": "Usuario no encontrado"},
                     status=status.HTTP_400_BAD_REQUEST,
@@ -139,7 +139,6 @@ class PerfilUsuario(APIView):
         serializer = None
 
         if Persona.objects.filter(user=user).exists():
-
             perfil_persona = Persona.objects.get(user=user)
             serializer = PersonaSerializer(perfil_persona)
         elif Organizacion.objects.filter(user=user).exists():
@@ -204,7 +203,7 @@ class ActivateAccount(APIView):
 
         # Verificar el token y activar la cuenta
         try:
-            user = User.objects.get(email=email)
+            user = Usuario.objects.get(email=email)
             if default_token_generator.check_token(user, token):
                 user.is_active = True
                 user.save()
@@ -231,7 +230,7 @@ class RecuPasswordRequest(APIView):
         serializer = RecuPassRequestserializer(data=request.data)
         if serializer.is_valid():
             email = serializer.validated_data["email"]
-            user = User.objects.get(email=email)
+            user = Usuario.objects.get(email=email)
             if user:
                 token = default_token_generator.make_token(user)
                 reset_url = reverse("recuperar-confirmacion")
@@ -265,7 +264,7 @@ class RecuPasswordConfirm(APIView):
             token = request.GET.get("token")
             new_password = serializer.validated_data["new_password"]
             try:
-                user = User.objects.get(email=email)
+                user = Usuario.objects.get(email=email)
                 if user and default_token_generator.check_token(user, token):
 
                     user.password = new_password
