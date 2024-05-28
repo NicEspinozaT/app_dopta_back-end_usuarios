@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "api",
     "rest_framework",
     "corsheaders",
+    "storages",
 ]
 
 CORS_ALLOWED_ORIGINS = ["http://localhost:8100"]
@@ -144,4 +145,9 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-AUTH_USER_MODEL = 'api.Usuario'
+AUTH_USER_MODEL = "api.Usuario"
+
+
+# Configura Firebase Storage
+
+
