@@ -2,8 +2,7 @@ from rest_framework import serializers
 from .models import Persona, Organizacion, Administrador
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
-from firebasestorage.firebase import bucket
-from urllib.parse import unquote
+from .mixins import FirebaseImageMixin
 
 User = get_user_model()
 
@@ -38,7 +37,7 @@ class RecuPassConfirmserializer(serializers.Serializer):
 
 
 # Persona
-class PersonaSerializer(serializers.ModelSerializer):
+class PersonaSerializer(FirebaseImageMixin, serializers.ModelSerializer):
     user = UserSerializer()
     imagen_perfil = serializers.ImageField(required=False)
 
@@ -63,34 +62,15 @@ class PersonaSerializer(serializers.ModelSerializer):
         return persona
 
     def update(self, instance, validated_data):
-
         imagen_perfil = validated_data.pop("imagen_perfil", None)
         if imagen_perfil:
             self.upload_image_to_firebase(instance, imagen_perfil)
-        print("Antes de guardar:", instance.imagen_perfil)
-
         instance.telefono = validated_data.get("telefono", instance.telefono)
         instance.direccion = validated_data.get("direccion", instance.direccion)
         instance.nombre = validated_data.get("nombre", instance.nombre)
         instance.apellido = validated_data.get("apellido", instance.apellido)
         instance.save()
-        print("despues de guardar:",instance.imagen_perfil)
         return instance
-
-    def upload_image_to_firebase(self, instance, imagen_perfil):
-        blob = bucket.blob(
-            f"imagen_perfil/{instance.user.username}.{imagen_perfil.name.split('.')[-1]}"
-        )
-        blob.upload_from_file(
-            imagen_perfil.file, content_type=imagen_perfil.content_type
-        )
-        blob.make_public()
-
-        public_url = blob.public_url
-        print("Public URL:", public_url)  # Verifica que la URL es correcta
-
-        instance.imagen_perfil = public_url
-        instance.save()
 
 
 # Organizacion
@@ -106,6 +86,7 @@ class OrganizacionSerializer(serializers.ModelSerializer):
             "rut_emp",
             "razon_social",
             "telefono2",
+            "imagen_perfil",
         ]
 
     def create(self, validated_data):
@@ -115,21 +96,9 @@ class OrganizacionSerializer(serializers.ModelSerializer):
         return organizacion
 
     def update(self, instance, validated_data):
-        user_data = validated_data.pop("user")
-        user_instance = instance.user
-
-        if "username" in user_data:
-            new_username = user_data["username"]
-            if new_username != user_instance.username:
-                user_instance.username = new_username
-
-        if "password" in user_data:
-            new_password = user_data["password"]
-            if new_password != user_instance.password:
-                user_instance.password = make_password(new_password)
-
-        user_instance.save()
-
+        imagen_perfil = validated_data.pop("imagen_perfil", None)
+        if imagen_perfil:
+            self.upload_image_to_firebase(instance, imagen_perfil)
         instance.telefono = validated_data.get("telefono", instance.telefono)
         instance.direccion = validated_data.get("direccion", instance.direccion)
         instance.rut_emp = validated_data.get("rut_emp", instance.rut_emp)
@@ -159,30 +128,19 @@ class AdministradorSerializer(serializers.ModelSerializer):
             "admin_apaterno",
             "admin_apmaterno",
             "admin_fec_nac",
+            "imagen_perfil",
         ]
 
     def create(self, validated_data):
         user_data = validated_data.pop("user")
-        user = User.objects.create_user(**user_data)
+        user = User.objects.create_superuser(**user_data)
         administrador = Administrador.objects.create(user=user, **validated_data)
         return administrador
 
     def update(self, instance, validated_data):
-        user_data = validated_data.pop("user")
-        user_instance = instance.user
-
-        if "username" in user_data:
-            new_username = user_data["username"]
-            if new_username != user_instance.username:
-                user_instance.username = new_username
-
-        if "password" in user_data:
-            new_password = user_data["password"]
-            if new_password != user_instance.password:
-                user_instance.password = make_password(new_password)
-
-        user_instance.save()
-
+        imagen_perfil = validated_data.pop("imagen_perfil", None)
+        if imagen_perfil:
+            self.upload_image_to_firebase(instance, imagen_perfil)
         instance.telefono = validated_data.get("telefono", instance.telefono)
         instance.direccion = validated_data.get("direccion", instance.direccion)
         instance.admin_numrut = validated_data.get(

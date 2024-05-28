@@ -13,10 +13,13 @@ class BaseUser(models.Model):
     user = models.OneToOneField(Usuario, on_delete=models.CASCADE)
     telefono = models.IntegerField()
     direccion = models.CharField(max_length=50)
-    imagen_perfil = models.ImageField(blank=True, null=True)
+    imagen_perfil = models.URLField(max_length=200, blank=True, null=True)
 
     class Meta:
         abstract = True
+
+    def __str__(self):
+        return self.user.get_username()
 
 
 class Persona(BaseUser):
