@@ -16,7 +16,9 @@ from .serializers import (
     RecuPassConfirmserializer,
 )
 from django.contrib.auth.tokens import default_token_generator
-from .models import Usuario, Persona, Organizacion, Administrador
+from .models import Persona, Organizacion, Administrador
+
+Usuario = settings.AUTH_USER_MODEL
 
 
 # login

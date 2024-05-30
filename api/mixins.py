@@ -1,14 +1,18 @@
 from firebasestorage.firebase import bucket
+from PIL import Image
+import io
 
 
 class FirebaseImageMixin:
     def upload_image_to_firebase(self, instance, imagen_perfil):
-        blob = bucket.blob(
-            f"imagen_perfil/{instance.user.username}.{imagen_perfil.name.split('.')[-1]}"
-        )
-        blob.upload_from_file(
-            imagen_perfil.file, content_type=imagen_perfil.content_type
-        )
+        imagen = Image.open(imagen_perfil)
+        jpg_image = io.BytesIO()
+        imagen.convert("RGB").save(jpg_image, format="JPEG")
+        jpg_image.seek(0)
+        
+        
+        blob = bucket.blob(f"imagen_perfil/{instance.user.username}.jpg")
+        blob.upload_from_file(jpg_image, content_type="image/jpeg")
         blob.make_public()
 
         public_url = blob.public_url

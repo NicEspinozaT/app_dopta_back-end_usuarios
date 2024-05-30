@@ -1,16 +1,12 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.utils.translation import gettext_lazy as _
 
-
-class Usuario(AbstractUser):
-    email = models.EmailField(_("email address"), unique=True)
 
 
 class BaseUser(models.Model):
-    user = models.OneToOneField(Usuario, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL , on_delete=models.CASCADE)
     telefono = models.IntegerField()
     direccion = models.CharField(max_length=50)
     imagen_perfil = models.URLField(max_length=200, blank=True, null=True)

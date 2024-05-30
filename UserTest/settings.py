@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     "api",
     "rest_framework",
     "corsheaders",
-    "storages",
+    "common",
 ]
 
 CORS_ALLOWED_ORIGINS = ["http://localhost:8100"]
@@ -95,13 +95,23 @@ WSGI_APPLICATION = "UserTest.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
+
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": "db_appdopta",
+        "USER": "root",
+        "PASSWORD": "Appdopta*1",
+        "HOST": "appdopta-aws.cdw28ekqc8xz.us-east-2.rds.amazonaws.com",
+        "PORT": "3306",
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -145,9 +155,7 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-AUTH_USER_MODEL = "api.Usuario"
+AUTH_USER_MODEL = "common.Usuario"
 
 
 # Configura Firebase Storage
-
-
