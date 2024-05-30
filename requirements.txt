@@ -5,15 +5,13 @@ certifi==2024.2.2
 cffi==1.16.0
 charset-normalizer==3.3.2
 cryptography==42.0.7
-Django==5.0.4
+Django==5.0.6
 django-cors-headers==4.3.1
-django-rest-passwordreset==1.4.1
-django-simple-history==3.5.0
 djangorestframework==3.15.1
 djangorestframework-simplejwt==5.3.1
 firebase-admin==6.5.0
 google-api-core==2.19.0
-google-api-python-client==2.130.0
+google-api-python-client==2.131.0
 google-auth==2.29.0
 google-auth-httplib2==0.2.0
 google-cloud-core==2.4.1
@@ -26,10 +24,8 @@ grpcio==1.64.0
 grpcio-status==1.62.2
 httplib2==0.22.0
 idna==3.7
-itsdangerous==2.2.0
 msgpack==1.0.8
 mysqlclient==2.2.4
-pillow==10.3.0
 proto-plus==1.23.0
 protobuf==4.25.3
 pyasn1==0.6.0
@@ -39,7 +35,6 @@ PyJWT==2.8.0
 pyparsing==3.1.2
 requests==2.32.2
 rsa==4.9
-six==1.16.0
 sqlparse==0.5.0
 tzdata==2024.1
 uritemplate==4.1.1
