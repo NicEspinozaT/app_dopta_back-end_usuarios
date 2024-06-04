@@ -19,6 +19,7 @@ from django.contrib.auth.tokens import default_token_generator
 from .models import Persona, Organizacion, Administrador
 from common.models import Usuario
 
+
 # login
 class LoginView(APIView):
     permission_classes = [AllowAny]
@@ -138,14 +139,13 @@ class PerfilUsuario(APIView):
         data = {}
         serializer = None
 
-        if Persona.objects.filter(user=user).exists():
+        if user.is_persona:
             perfil_persona = Persona.objects.get(user=user)
             serializer = PersonaSerializer(perfil_persona)
-        elif Organizacion.objects.filter(user=user).exists():
+        elif user.is_organizacion:
             perfil_organizacion = Organizacion.objects.get(user=user)
             serializer = OrganizacionSerializer(perfil_organizacion)
-        elif Administrador.objects.filter(user=user).exists():
-
+        elif user.is_administrador:
             perfil_administrador = Administrador.objects.get(user=user)
             serializer = AdministradorSerializer(perfil_administrador)
         else:
@@ -156,6 +156,7 @@ class PerfilUsuario(APIView):
 
         # Serializar los datos del perfil y retornar la respuesta
         if serializer:
+
             data = serializer.data
             return Response(data)
 
@@ -164,17 +165,17 @@ class PerfilUsuario(APIView):
         user = request.user
 
         # Determinar el tipo de submodelo asociado al usuario
-        if Persona.objects.filter(user=user).exists():
+        if user.is_persona:
             perfil_persona = Persona.objects.get(user=user)
             serializer = PersonaSerializer(
                 perfil_persona, data=request.data, partial=True
             )
-        elif Organizacion.objects.filter(user=user).exists():
+        elif user.is_organizacion:
             perfil_organizacion = Organizacion.objects.get(user=user)
             serializer = OrganizacionSerializer(
                 perfil_organizacion, data=request.data, partial=True
             )
-        elif Administrador.objects.filter(user=user).exists():
+        elif user.is_administrador:
             perfil_administrador = Administrador.objects.get(user=user)
             serializer = AdministradorSerializer(
                 perfil_administrador, data=request.data, partial=True
