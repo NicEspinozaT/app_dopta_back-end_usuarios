@@ -1,23 +1,18 @@
 from django.conf import settings
+from django.contrib.auth.tokens import default_token_generator
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.utils import timezone
 from django.urls import reverse
 from django.core.mail import send_mail
 from rest_framework import status, generics
-from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import (
-    PersonaSerializer,
-    LoginSerializer,
-    OrganizacionSerializer,
-    AdministradorSerializer,
-    RecuPassRequestserializer,
-    RecuPassConfirmserializer,
-)
-from django.contrib.auth.tokens import default_token_generator
-from .models import Persona, Organizacion, Administrador
+from rest_framework.response import Response
+from .serializers import *
+from .models import Persona, Organizacion
 from common.models import Usuario
+from administrador.serializers import AdministradorSerializer
+from administrador.models import Administrador
 
 
 # login
@@ -131,6 +126,8 @@ class RegistroOrganizaicion(APIView):
 
 
 class PerfilUsuario(APIView):
+    permission_classes = [IsAuthenticated]
+
     # Método para obtener el perfil de usuario
     def get(self, request):
         user = request.user

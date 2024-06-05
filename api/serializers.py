@@ -1,10 +1,7 @@
 from rest_framework import serializers
-from .models import Persona, Organizacion, Administrador
-from django.contrib.auth import get_user_model
-from django.contrib.auth.hashers import make_password
+from .models import Persona, Organizacion
+from common.models import Usuario
 from .mixins import FirebaseImageMixin
-
-User = get_user_model()
 
 
 # login
@@ -16,7 +13,7 @@ class LoginSerializer(serializers.Serializer):
 # registro
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = Usuario
         fields = ["username", "email", "password"]
         extra_kwargs = {"password": {"write_only": True}}
 
@@ -40,6 +37,7 @@ class RecuPassConfirmserializer(serializers.Serializer):
 class PersonaSerializer(FirebaseImageMixin, serializers.ModelSerializer):
     user = UserSerializer()
     imagen_perfil = serializers.ImageField(required=False)
+    documento = serializers.FileField(required=False)
 
     class Meta:
         model = Persona
@@ -50,21 +48,28 @@ class PersonaSerializer(FirebaseImageMixin, serializers.ModelSerializer):
             "nombre",
             "apellido",
             "imagen_perfil",
+            "documento",
         ]
 
     def create(self, validated_data):
         user_data = validated_data.pop("user")
-        user = User.objects.create_user(**user_data)
+        user = Usuario.objects.create_user(**user_data)
         imagen_perfil = validated_data.pop("imagen_perfil", None)
+        documento = validated_data.pop("documento", None)
         persona = Persona.objects.create(user=user, **validated_data)
         if imagen_perfil:
             self.upload_image_to_firebase(persona, imagen_perfil)
+        if documento:
+            self.upload_document_to_firebase(persona, documento)
         return persona
 
     def update(self, instance, validated_data):
         imagen_perfil = validated_data.pop("imagen_perfil", None)
+        documento = validated_data.pop("documento", None)
         if imagen_perfil:
             self.upload_image_to_firebase(instance, imagen_perfil)
+        if documento:
+            self.upload_document_to_firebase(instance, documento)
         instance.telefono = validated_data.get("telefono", instance.telefono)
         instance.direccion = validated_data.get("direccion", instance.direccion)
         instance.nombre = validated_data.get("nombre", instance.nombre)
@@ -74,7 +79,7 @@ class PersonaSerializer(FirebaseImageMixin, serializers.ModelSerializer):
 
 
 # Organizacion
-class OrganizacionSerializer(serializers.ModelSerializer):
+class OrganizacionSerializer(FirebaseImageMixin, serializers.ModelSerializer):
     user = UserSerializer()
 
     class Meta:
@@ -91,7 +96,7 @@ class OrganizacionSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user_data = validated_data.pop("user")
-        user = User.objects.create_user(**user_data)
+        user = Usuario.objects.create_user(**user_data)
         organizacion = Organizacion.objects.create(user=user, **validated_data)
         return organizacion
 
@@ -106,62 +111,6 @@ class OrganizacionSerializer(serializers.ModelSerializer):
             "razon_social", instance.razon_social
         )
         instance.telefono2 = validated_data.get("telefono2", instance.telefono2)
-        instance.save()
-
-        return instance
-
-
-# Administrador
-class AdministradorSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
-
-    class Meta:
-        model = Administrador
-        fields = [
-            "user",
-            "telefono",
-            "direccion",
-            "admin_numrut",
-            "admin_dv",
-            "admin_p_nombre",
-            "admin_s_nombre",
-            "admin_apaterno",
-            "admin_apmaterno",
-            "admin_fec_nac",
-            "imagen_perfil",
-        ]
-
-    def create(self, validated_data):
-        user_data = validated_data.pop("user")
-        user = User.objects.create_superuser(**user_data)
-        administrador = Administrador.objects.create(user=user, **validated_data)
-        return administrador
-
-    def update(self, instance, validated_data):
-        imagen_perfil = validated_data.pop("imagen_perfil", None)
-        if imagen_perfil:
-            self.upload_image_to_firebase(instance, imagen_perfil)
-        instance.telefono = validated_data.get("telefono", instance.telefono)
-        instance.direccion = validated_data.get("direccion", instance.direccion)
-        instance.admin_numrut = validated_data.get(
-            "admin_numrut", instance.admin_numrut
-        )
-        instance.admin_dv = validated_data.get("admin_dv", instance.admin_dv)
-        instance.admin_p_nombre = validated_data.get(
-            "admin_p_nombre", instance.admin_p_nombre
-        )
-        instance.admin_s_nombre = validated_data.get(
-            "admin_s_nombre", instance.admin_s_nombre
-        )
-        instance.admin_apaterno = validated_data.get(
-            "admin_apaterno", instance.admin_apaterno
-        )
-        instance.admin_apmaterno = validated_data.get(
-            "admin_apmaterno", instance.admin_apmaterno
-        )
-        instance.admin_fec_nac = validated_data.get(
-            "admin_fec_nac", instance.admin_fec_nac
-        )
         instance.save()
 
         return instance
