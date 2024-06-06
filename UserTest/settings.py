@@ -11,6 +11,21 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import requests
+from datetime import timedelta
+
+
+def get_public_ip():
+    try:
+        response = requests.get("https://api.ipify.org?format=json")
+        ip = response.json().get("ip")
+        return ip
+    except requests.RequestException:
+        return "localhost"  # Valor por defecto
+
+
+PUBLIC_IP = get_public_ip()
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,11 +40,17 @@ SECRET_KEY = "django-insecure-$srlseyzt*isvdte7l57p+xlixs&3c)ze1m3&b)r5@k*-vjq1x
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+
+if DEBUG:
+    BASE_URL = "http://localhost:8001"
+else:
+    BASE_URL = f"http://{PUBLIC_IP}:8001"
+
 ALLOWED_HOSTS = []
 
 
 # Application definition
-BASE_URL = "http://localhost:8000"
+# BASE_URL = "http://localhost:8000"
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -39,10 +60,11 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "api",
+    "administrador",
+    "common",
     "rest_framework",
     "rest_framework_simplejwt",
     "corsheaders",
-    "common",
 ]
 
 CORS_ALLOWED_ORIGINS = ["http://localhost:8100"]
@@ -159,4 +181,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "common.Usuario"
 
 
-# Configura Firebase Storage
+# Jwt Config
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(weeks=1),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=30),
+}
