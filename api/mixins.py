@@ -19,6 +19,15 @@ class FirebaseImageMixin:
         instance.imagen_perfil = public_url
         instance.save()
 
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation["imagen_perfil"] = (
+            instance.imagen_perfil if instance.imagen_perfil else None
+        )
+        return representation
+
+
+class FirebaseDocMixin:
     def upload_document_to_firebase(self, instance, documento):
 
         blob = bucket.blob(f"doc_user/{instance.user.username}/{documento.name}")
@@ -32,8 +41,5 @@ class FirebaseImageMixin:
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation["imagen_perfil"] = (
-            instance.imagen_perfil if instance.imagen_perfil else None
-        )
         representation["documento"] = instance.documento if instance.documento else None
         return representation

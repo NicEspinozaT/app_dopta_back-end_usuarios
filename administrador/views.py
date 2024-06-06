@@ -1,13 +1,24 @@
-from rest_framework import generics
+from rest_framework import generics, status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework.permissions import IsAdminUser
 from api.models import Persona, Organizacion
 from api.serializers import PersonaSerializer, OrganizacionSerializer
+from .serializers import AdministradorSerializer
 
-"""
-TODO: 
-    - Agregar vista creacion de administrador
-    con permiso Admin
-"""
+
+class RegistroAdmin(APIView):
+    permission_classes = [IsAdminUser]
+
+    def post(self, request):
+        serializer = AdministradorSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                {"message": "Usuario Administrador registrado exitosamente."},
+                status=status.HTTP_201_CREATED,
+            )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class PersListCreate(generics.ListCreateAPIView):

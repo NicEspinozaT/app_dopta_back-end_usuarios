@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import Persona, Organizacion
 from common.models import Usuario
-from .mixins import FirebaseImageMixin
+from .mixins import FirebaseImageMixin, FirebaseDocMixin
 
 
 # login
@@ -34,7 +34,9 @@ class RecuPassConfirmserializer(serializers.Serializer):
 
 
 # Persona
-class PersonaSerializer(FirebaseImageMixin, serializers.ModelSerializer):
+class PersonaSerializer(
+    FirebaseImageMixin, FirebaseDocMixin, serializers.ModelSerializer
+):
     user = UserSerializer()
     imagen_perfil = serializers.ImageField(required=False)
     documento = serializers.FileField(required=False)
