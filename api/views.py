@@ -14,7 +14,6 @@ from common.models import Usuario
 from administrador.serializers import AdministradorSerializer
 from administrador.models import Administrador
 
-
 # login
 class LoginView(APIView):
     permission_classes = [AllowAny]
