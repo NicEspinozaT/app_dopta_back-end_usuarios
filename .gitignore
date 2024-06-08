@@ -1,5 +1,6 @@
 db.sqlite3
 __pycache__
-firebasestorage
 venv
 migrations/
+.env
+firebase_key.json
