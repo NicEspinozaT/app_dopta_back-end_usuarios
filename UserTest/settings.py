@@ -51,7 +51,7 @@ if DEBUG:
 else:
     BASE_URL = f"http://{PUBLIC_IP}:8001"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -72,7 +72,8 @@ INSTALLED_APPS = [
     "corsheaders",
 ]
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:8100", "http://localhost:4200"]
+# CORS_ALLOWED_ORIGINS = ["http://localhost:8100", "http://localhost:4200"]
+CORS_ALLOW_ALL_ORIGINS = True
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"

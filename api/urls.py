@@ -21,7 +21,7 @@ urlpatterns = [
     path("perfil/", PerfilUsuario.as_view(), name="perfil"),
     path("recuperar/", RecuPasswordRequest.as_view(), name="recuperar-contraseña"),
     path(
-        "recuperar-confirmacion",
+        "recuperar-confirmacion/",
         RecuPasswordConfirm.as_view(),
         name="recuperar-confirmacion",
     ),

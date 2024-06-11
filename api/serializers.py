@@ -14,7 +14,7 @@ class LoginSerializer(serializers.Serializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Usuario
-        fields = ["username", "email", "password"]
+        fields = ["id","username", "email", "password"]
         extra_kwargs = {"password": {"write_only": True}}
 
 
@@ -31,6 +31,7 @@ class RecuPassConfirmserializer(serializers.Serializer):
         if data["new_password"] != data["confirm_new_password"]:
             raise serializers.ValidationError("Las contraseñas no coinciden.")
         return data
+
 
 
 # Persona
