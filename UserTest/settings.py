@@ -11,21 +11,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
-import requests
 from datetime import timedelta
 import environ, os
-
-
-def get_public_ip():
-    try:
-        response = requests.get("https://api.ipify.org?format=json")
-        ip = response.json().get("ip")
-        return ip
-    except requests.RequestException:
-        return "localhost"  # Valor por defecto
-
-
-PUBLIC_IP = get_public_ip()
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -46,16 +33,13 @@ SECRET_KEY = env("SECRET_KEY")
 DEBUG = True
 
 
-if DEBUG:
-    BASE_URL = "http://alb-appdoptauser-1760123330.us-east-1.elb.amazonaws.com"
-else:
-    BASE_URL = f"http://{PUBLIC_IP}:8001"
-
-ALLOWED_HOSTS = ['*']
+BASE_URL = "http://alb-appdoptauser-1760123330.us-east-1.elb.amazonaws.com"
 
 
-# Application definition
-# BASE_URL = "http://localhost:8000"
+ALLOWED_HOSTS = ["*"]
+
+DATETIME_FORMAT = "%d-%m-%Y %H:%M:%S"
+
 
 INSTALLED_APPS = [
     "django.contrib.admin",
