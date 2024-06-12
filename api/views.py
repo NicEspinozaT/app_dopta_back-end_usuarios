@@ -125,14 +125,50 @@ class RegistroOrganizaicion(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+# ver perfil ajeno
+
+
+class VerPerfil(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, pk):
+        try:
+            user = Usuario.objects.get(pk=pk)
+
+            data = {}
+            serializer = None
+
+            if user.is_persona:
+                perfil_persona = Persona.objects.get(user=user)
+                serializer = PersonaSerializer(perfil_persona)
+            elif user.is_organizacion:
+                perfil_organizacion = Organizacion.objects.get(user=user)
+                serializer = OrganizacionSerializer(perfil_organizacion)
+            elif user.is_administrador:
+                perfil_administrador = Administrador.objects.get(user=user)
+                serializer = AdministradorSerializer(perfil_administrador)
+            else:
+                return Response(
+                    {"error": "No se encontró ningún perfil asociado al usuario."},
+                    status=status.HTTP_404_NOT_FOUND,
+                )
+            if serializer:
+
+                data = serializer.data
+                return Response(data)
+        except user.DoesNotExist:
+            return Response(
+                {"error": "Usuario no encontrado"}, status=status.HTTP_404_NOT_FOUND
+            )
+
+
+# Ver y actualizar perfil propio
 class PerfilUsuario(APIView):
     permission_classes = [IsAuthenticated]
 
-    # Método para obtener el perfil de usuario
     def get(self, request):
         user = request.user
 
-        # Inicializar el objeto de datos y el serializer
         data = {}
         serializer = None
 
@@ -150,18 +186,14 @@ class PerfilUsuario(APIView):
                 {"error": "No se encontró ningún perfil asociado al usuario."},
                 status=status.HTTP_404_NOT_FOUND,
             )
-
-        # Serializar los datos del perfil y retornar la respuesta
         if serializer:
 
             data = serializer.data
             return Response(data)
 
-    # Método para actualizar el perfil de usuario
     def put(self, request):
         user = request.user
 
-        # Determinar el tipo de submodelo asociado al usuario
         if user.is_persona:
             perfil_persona = Persona.objects.get(user=user)
             serializer = PersonaSerializer(

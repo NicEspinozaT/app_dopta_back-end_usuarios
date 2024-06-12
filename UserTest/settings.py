@@ -47,7 +47,7 @@ DEBUG = True
 
 
 if DEBUG:
-    BASE_URL = "http://localhost:8001"
+    BASE_URL = "http://alb-appdoptauser-1760123330.us-east-1.elb.amazonaws.com"
 else:
     BASE_URL = f"http://{PUBLIC_IP}:8001"
 

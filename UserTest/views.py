@@ -10,18 +10,18 @@ class WelcomeView(APIView):
         endpoints_user = {
             "login": "/user/login/",
             "registro persona": "/user/persona/registro/",
-            "registro organizacion": "user/organizacion/registro/",
-            "activacion de cuenta": "user/activate-account/",
-            "perfil usuario (requiere token de auth)": "perfil/",
+            "registro organizacion": "/user/organizacion/registro/",
+            "activacion de cuenta": "/user/activate-account/",
+            "perfil usuario (requiere token de auth)": "/user/perfil/",
             "recuperar contraseña": "user/recuperar/",
-            "confirmacion de rec. contraseña": "user/recuperar-confirmacion/",
+            "confirmacion de rec. contraseña": "/user/recuperar-confirmacion/",
         }
         endpoints_admin = {
-            "registro administrador": "admin-user/registro/",
-            "listar-crear personas": "admin-user/personas/",
-            "actualizar-eliminar persona": "admin-user/personas/<int:pk>/",
-            "listar-crear organizacion": "admin-user/org/",
-            "actualizar-eliminar organizacion": "admin-user/org/<int:pk>/",
+            "registro administrador": "/admin-user/registro/",
+            "listar-crear personas": "/admin-user/personas/",
+            "actualizar-eliminar persona": "/admin-user/personas/<int:pk>/",
+            "listar-crear organizacion": "/admin-user/org/",
+            "actualizar-eliminar organizacion": "/admin-user/org/<int:pk>/",
         }
         endpoints = {
             "bienvenida": "/",
