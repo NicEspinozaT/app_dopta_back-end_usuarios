@@ -156,7 +156,7 @@ class VerPerfil(APIView):
 
                 data = serializer.data
                 return Response(data)
-        except user.DoesNotExist:
+        except Usuario.DoesNotExist:
             return Response(
                 {"error": "Usuario no encontrado"}, status=status.HTTP_404_NOT_FOUND
             )

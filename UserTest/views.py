@@ -13,6 +13,7 @@ class WelcomeView(APIView):
             "registro organizacion": "/user/organizacion/registro/",
             "activacion de cuenta": "/user/activate-account/",
             "perfil usuario (requiere token de auth)": "/user/perfil/",
+            "ver perfil (requiere token de auth)": "/user/<int:pk>/perfil/",
             "recuperar contraseña": "user/recuperar/",
             "confirmacion de rec. contraseña": "/user/recuperar-confirmacion/",
         }
