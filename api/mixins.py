@@ -1,6 +1,6 @@
 from firebasestorage.firebase import bucket
 from PIL import Image
-import io
+import io,os
 
 
 class FirebaseImageMixin:
@@ -30,12 +30,21 @@ class FirebaseImageMixin:
 class FirebaseDocMixin:
     def upload_document_to_firebase(self, instance, documento):
 
-        blob = bucket.blob(f"doc_user/{instance.user.username}/{documento.name}")
+        username = instance.user.username
+        doc_name, doc_extension = os.path.splitext(documento.name)
+        
+        # Nombre completo del archivo en Firebase Storage
+        blob_name = f"doc_user/{username}/{username}{doc_extension}"
+        
+        # Subir el documento a Firebase Storage
+        blob = bucket.blob(blob_name)
         blob.upload_from_file(documento)
         blob.make_public()  # Hacer el archivo público
 
+        # Obtener la URL pública del documento
         public_url = blob.public_url
 
+        # Guardar la URL en el modelo
         instance.documento = public_url
         instance.save()
 

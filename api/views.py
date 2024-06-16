@@ -144,7 +144,7 @@ class VerPerfil(APIView):
             elif user.is_organizacion:
                 perfil_organizacion = Organizacion.objects.get(user=user)
                 serializer = OrganizacionSerializer(perfil_organizacion)
-            elif user.is_administrador:
+            elif user.is_staff:
                 perfil_administrador = Administrador.objects.get(user=user)
                 serializer = AdministradorSerializer(perfil_administrador)
             else:
@@ -178,7 +178,7 @@ class PerfilUsuario(APIView):
         elif user.is_organizacion:
             perfil_organizacion = Organizacion.objects.get(user=user)
             serializer = OrganizacionSerializer(perfil_organizacion)
-        elif user.is_administrador:
+        elif user.is_staff:
             perfil_administrador = Administrador.objects.get(user=user)
             serializer = AdministradorSerializer(perfil_administrador)
         else:
@@ -204,7 +204,7 @@ class PerfilUsuario(APIView):
             serializer = OrganizacionSerializer(
                 perfil_organizacion, data=request.data, partial=True
             )
-        elif user.is_administrador:
+        elif user.is_staff:
             perfil_administrador = Administrador.objects.get(user=user)
             serializer = AdministradorSerializer(
                 perfil_administrador, data=request.data, partial=True
