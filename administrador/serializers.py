@@ -35,27 +35,29 @@ class AdministradorSerializer(FirebaseImageMixin, serializers.ModelSerializer):
         imagen_perfil = validated_data.pop("imagen_perfil", None)
         if imagen_perfil:
             self.upload_image_to_firebase(instance, imagen_perfil)
+
+        if "admin_numrut" in validated_data:
+            validated_data.pop("admin_numrut")
+        if "admin_dv" in validated_data:
+            validated_data.pop("admin_dv")
+        if "admin_p_nombre" in validated_data:
+            validated_data.pop("admin_p_nombre")
+        if "admin_apaterno" in validated_data:
+            validated_data.pop("admin_apaterno")
+        if "admin_fec_nac" in validated_data:
+            validated_data.pop("admin_fec_nac")
+
         instance.telefono = validated_data.get("telefono", instance.telefono)
         instance.direccion = validated_data.get("direccion", instance.direccion)
-        instance.admin_numrut = validated_data.get(
-            "admin_numrut", instance.admin_numrut
-        )
-        instance.admin_dv = validated_data.get("admin_dv", instance.admin_dv)
-        instance.admin_p_nombre = validated_data.get(
-            "admin_p_nombre", instance.admin_p_nombre
-        )
+
         instance.admin_s_nombre = validated_data.get(
             "admin_s_nombre", instance.admin_s_nombre
         )
-        instance.admin_apaterno = validated_data.get(
-            "admin_apaterno", instance.admin_apaterno
-        )
+
         instance.admin_apmaterno = validated_data.get(
             "admin_apmaterno", instance.admin_apmaterno
         )
-        instance.admin_fec_nac = validated_data.get(
-            "admin_fec_nac", instance.admin_fec_nac
-        )
+
         instance.save()
 
         return instance

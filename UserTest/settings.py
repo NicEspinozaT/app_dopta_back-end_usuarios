@@ -38,8 +38,6 @@ BASE_URL = "http://alb-appdoptauser-1760123330.us-east-1.elb.amazonaws.com"
 
 ALLOWED_HOSTS = ["*"]
 
-DATETIME_FORMAT = "%d-%m-%Y %H:%M:%S"
-
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -78,6 +76,8 @@ MIDDLEWARE = [
 ]
 
 REST_FRAMEWORK = {
+    'DATETIME_FORMAT': '%d-%m-%Y %H:%M:%S',
+    'DATE_FORMAT': '%d-%m-%Y',
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.TokenAuthentication",
         "rest_framework_simplejwt.authentication.JWTAuthentication",

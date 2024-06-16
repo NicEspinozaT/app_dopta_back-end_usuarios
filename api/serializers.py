@@ -50,6 +50,7 @@ class PersonaSerializer(
             "direccion",
             "nombre",
             "apellido",
+            "fec_nac",
             "imagen_perfil",
             "documento",
         ]
@@ -73,10 +74,16 @@ class PersonaSerializer(
             self.upload_image_to_firebase(instance, imagen_perfil)
         if documento:
             self.upload_document_to_firebase(instance, documento)
+
+        if "nombre" in validated_data:
+            validated_data.pop("nombre")
+        if "apellido" in validated_data:
+            validated_data.pop("apellido")
+        if "fec_nac" in validated_data:
+            validated_data.pop("fec_nac")
+
         instance.telefono = validated_data.get("telefono", instance.telefono)
         instance.direccion = validated_data.get("direccion", instance.direccion)
-        instance.nombre = validated_data.get("nombre", instance.nombre)
-        instance.apellido = validated_data.get("apellido", instance.apellido)
         instance.save()
         return instance
 
@@ -92,7 +99,8 @@ class OrganizacionSerializer(FirebaseImageMixin, serializers.ModelSerializer):
             "id",
             "telefono",
             "direccion",
-            "rut_emp",
+            "numrut_org",
+            "dv",
             "razon_social",
             "telefono2",
             "imagen_perfil",
@@ -108,9 +116,15 @@ class OrganizacionSerializer(FirebaseImageMixin, serializers.ModelSerializer):
         imagen_perfil = validated_data.pop("imagen_perfil", None)
         if imagen_perfil:
             self.upload_image_to_firebase(instance, imagen_perfil)
+
+        if "numrut_org" in validated_data:
+            validated_data.pop("numrut_org")
+        if "dv" in validated_data:
+            validated_data.pop("dv")
+            
+            
         instance.telefono = validated_data.get("telefono", instance.telefono)
         instance.direccion = validated_data.get("direccion", instance.direccion)
-        instance.rut_emp = validated_data.get("rut_emp", instance.rut_emp)
         instance.razon_social = validated_data.get(
             "razon_social", instance.razon_social
         )
