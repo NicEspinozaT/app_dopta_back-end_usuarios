@@ -19,7 +19,7 @@ DV_choices = {
 # Create your models here.
 class Administrador(BaseUser):
     admin_numrut = models.IntegerField("Numero de rut")
-    admin_dv = models.CharField("Digito verificador", choices=DV_choices)
+    admin_dv = models.CharField("Digito verificador", choices=DV_choices, max_length=1)
     admin_p_nombre = models.CharField("Primer nombre", max_length=25)
     admin_s_nombre = models.CharField(
         "Segundo Nombre", max_length=25, blank=True, null=True

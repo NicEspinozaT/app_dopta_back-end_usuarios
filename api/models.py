@@ -50,7 +50,7 @@ class Organizacion(BaseUser):
     numrut_org = models.IntegerField(
         validators=[MinValueValidator(1111111), MaxValueValidator(99999999)]
     )
-    dv = models.CharField('Digito verificador',choices=DV_choices)
+    dv = models.CharField('Digito verificador',choices=DV_choices,max_length=1)
     razon_social = models.CharField("Razon social", max_length=50)
     telefono2 = models.IntegerField(
         validators=[MinValueValidator(111111111), MaxValueValidator(999999999)]
