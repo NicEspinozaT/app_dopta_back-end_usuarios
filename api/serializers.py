@@ -14,7 +14,7 @@ class LoginSerializer(serializers.Serializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Usuario
-        fields = ["id","username", "email", "password"]
+        fields = ["id", "username", "email", "password"]
         extra_kwargs = {"password": {"write_only": True}}
 
 
@@ -33,7 +33,6 @@ class RecuPassConfirmserializer(serializers.Serializer):
         return data
 
 
-
 # Persona
 class PersonaSerializer(
     FirebaseImageMixin, FirebaseDocMixin, serializers.ModelSerializer
@@ -46,6 +45,7 @@ class PersonaSerializer(
         model = Persona
         fields = [
             "user",
+            "id",
             "telefono",
             "direccion",
             "nombre",
@@ -89,6 +89,7 @@ class OrganizacionSerializer(FirebaseImageMixin, serializers.ModelSerializer):
         model = Organizacion
         fields = [
             "user",
+            "id",
             "telefono",
             "direccion",
             "rut_emp",

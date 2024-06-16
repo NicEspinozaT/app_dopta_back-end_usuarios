@@ -27,10 +27,35 @@ class PersListCreate(generics.ListCreateAPIView):
     permission_classes = [IsAdminUser]
 
 
-class PersDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Persona.objects.all()
-    serializer_class = PersonaSerializer
+class PersDetail(APIView):
     permission_classes = [IsAdminUser]
+
+    def get(self, request, pk):
+
+        serializer = None
+
+        try:
+            persona = Persona.objects.get(pk=pk)
+            serializer = PersonaSerializer(persona)
+            return Response(serializer.data)
+        except Persona.DoesNotExist:
+            return Response(
+                {"message": "La persona no existe"}, status=status.HTTP_404_NOT_FOUND
+            )
+        except Exception as e:
+            return Response({"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        try:
+            persona = Persona.objects.get(pk=pk)
+            persona.delete()
+            return Response({"message": "Persona Eliminada con exito"})
+        except Persona.DoesNotExist:
+            return Response(
+                {"message": "La persona no existe"}, status=status.HTTP_404_NOT_FOUND
+            )
+        except Exception as e:
+            return Response({"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class OrgListCreate(generics.ListCreateAPIView):
@@ -40,6 +65,31 @@ class OrgListCreate(generics.ListCreateAPIView):
 
 
 class OrgDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Organizacion.objects.all()
-    serializer_class = OrganizacionSerializer
     permission_classes = [IsAdminUser]
+
+    def get(self, request, pk):
+
+        serializer = None
+
+        try:
+            organizacion = Organizacion.objects.get(pk=pk)
+            serializer = OrganizacionSerializer(organizacion)
+            return Response(serializer.data)
+        except Organizacion.DoesNotExist:
+            return Response(
+                {"message": "La organizacion no existe"}, status=status.HTTP_404_NOT_FOUND
+            )
+        except Exception as e:
+            return Response({"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        try:
+            organizacion = Organizacion.objects.get(pk=pk)
+            organizacion.delete()
+            return Response({"message": "Organizacion Eliminada con exito"})
+        except Organizacion.DoesNotExist:
+            return Response(
+                {"message": "La organizacion no existe"}, status=status.HTTP_404_NOT_FOUND
+            )
+        except Exception as e:
+            return Response({"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
